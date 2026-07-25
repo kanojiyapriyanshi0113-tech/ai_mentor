@@ -1,0 +1,27 @@
+﻿table_name|column_name|data_type|is_nullable|column_default
+batches|id|uuid|NO|gen_random_uuid()
+batches|exam_id|integer|NO|
+batches|title|character varying|NO|
+batches|description|text|YES|
+batches|thumbnail|character varying|YES|
+batches|is_active|boolean|NO|true
+batches|created_at|timestamp with time zone|NO|now()
+chapters|id|uuid|NO|gen_random_uuid()
+chapters|subject_id|uuid|NO|
+chapters|title|character varying|NO|
+chapters|description|text|YES|
+chapters|display_order|integer|NO|0
+lectures|id|uuid|NO|gen_random_uuid()
+lectures|chapter_id|uuid|NO|
+lectures|title|character varying|NO|
+lectures|description|text|YES|
+lectures|duration_minutes|integer|NO|0
+lectures|video_url|character varying|NO|
+lectures|is_preview|boolean|NO|false
+lectures|display_order|integer|NO|0
+subjects|id|uuid|NO|gen_random_uuid()
+subjects|batch_id|uuid|NO|
+subjects|name|character varying|NO|
+subjects|icon|character varying|YES|
+subjects|display_order|integer|NO|0
+(25 rows)

@@ -1,0 +1,9 @@
+﻿id|code|name
+1|UPSC|UPSC
+2|SSC|SSC
+3|BANKING|Banking
+4|RAILWAY|Railway
+5|NEET|NEET
+6|JEE|JEE
+7|STATE_PSC|State PSC
+(7 rows)

@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS app_settings;
+DROP TABLE IF EXISTS banners;
+DROP TABLE IF EXISTS payments;
+DROP TABLE IF EXISTS coupons;
+ALTER TABLE plans DROP COLUMN IF EXISTS is_active;
+DROP INDEX IF EXISTS idx_users_is_suspended;
+DROP INDEX IF EXISTS idx_users_is_blocked;
+ALTER TABLE users DROP COLUMN IF EXISTS is_approved;
+ALTER TABLE users DROP COLUMN IF EXISTS is_suspended;
+ALTER TABLE users DROP COLUMN IF EXISTS is_blocked;

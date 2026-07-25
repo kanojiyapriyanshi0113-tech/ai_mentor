@@ -1,0 +1,8 @@
+﻿node_modules/
+.dart_tool/
+build/
+.env
+*.log
+frontend/.flutter-plugins*
+frontend/android/local.properties
+backend/tmp/

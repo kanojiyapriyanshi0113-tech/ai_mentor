@@ -1,0 +1,27 @@
+﻿table_name|column_name
+batches|id
+batches|exam_id
+batches|title
+batches|description
+batches|thumbnail
+batches|is_active
+batches|created_at
+chapters|id
+chapters|subject_id
+chapters|title
+chapters|description
+chapters|display_order
+lectures|id
+lectures|chapter_id
+lectures|title
+lectures|description
+lectures|duration_minutes
+lectures|video_url
+lectures|is_preview
+lectures|display_order
+subjects|id
+subjects|batch_id
+subjects|name
+subjects|icon
+subjects|display_order
+(25 rows)
