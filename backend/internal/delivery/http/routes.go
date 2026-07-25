@@ -1,4 +1,4 @@
-﻿package http
+package http
 
 import (
     "github.com/gin-gonic/gin"
@@ -90,14 +90,17 @@ func RegisterRoutes(r *gin.Engine, h *Handlers, jwtSecret string, subscriptionUC
         teacher.POST("/pdfs", h.Teacher.UploadPDF)
         teacher.PUT("/pdfs/:id", h.Teacher.ReplacePDF)
         teacher.DELETE("/pdfs/:id", h.Teacher.DeletePDF)
+        teacher.GET("/pdfs", h.Teacher.ListPDFs)
 
         teacher.POST("/mocktests", h.Teacher.CreateMockTest)
         teacher.PUT("/mocktests/:id", h.Teacher.UpdateMockTest)
         teacher.DELETE("/mocktests/:id", h.Teacher.DeleteMockTest)
+        teacher.GET("/mocktests", h.Teacher.ListMockTests)
 
         teacher.POST("/pyqs", h.Teacher.UploadPYQ)
         teacher.PUT("/pyqs/:id", h.Teacher.UpdatePYQ)
         teacher.DELETE("/pyqs/:id", h.Teacher.DeletePYQ)
+        teacher.GET("/pyqs", h.Teacher.ListPYQs)
 
         teacher.POST("/live-classes", h.Teacher.CreateLiveClass)
 

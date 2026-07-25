@@ -1,2 +1,5 @@
 
 .env
+
+*.bak
+apply_teacher_get_endpoints.ps1

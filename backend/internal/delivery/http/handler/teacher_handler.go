@@ -1,4 +1,4 @@
-﻿package handler
+package handler
 
 import (
     "errors"
@@ -576,4 +576,50 @@ func (h *TeacherHandler) SendNotification(c *gin.Context) {
         return
     }
     response.Success(c, http.StatusOK, nil, "Notification sent")
+}
+func (h *TeacherHandler) ListPDFs(c *gin.Context) {
+    pdfs, err := h.teacherUC.ListPDFs(c.Request.Context(), usecase.ListPDFsInput{
+        BatchID:   c.Query("batchId"),
+        SubjectID: c.Query("subjectId"),
+        ChapterID: c.Query("chapterId"),
+    })
+    if err != nil {
+        handleTeacherError(c, err)
+        return
+    }
+    resp := make([]dto.PDFResponse, 0, len(pdfs))
+    for _, p := range pdfs {
+        resp = append(resp, toPDFDTO(p))
+    }
+    response.Success(c, http.StatusOK, resp, "")
+}
+
+func (h *TeacherHandler) ListMockTests(c *gin.Context) {
+    tests, err := h.teacherUC.ListMockTests(c.Request.Context(), usecase.ListMockTestsInput{
+        BatchID: c.Query("batchId"),
+    })
+    if err != nil {
+        handleTeacherError(c, err)
+        return
+    }
+    resp := make([]dto.MockTestResponse, 0, len(tests))
+    for _, m := range tests {
+        resp = append(resp, toMockTestDTO(m))
+    }
+    response.Success(c, http.StatusOK, resp, "")
+}
+
+func (h *TeacherHandler) ListPYQs(c *gin.Context) {
+    pyqs, err := h.teacherUC.ListPYQs(c.Request.Context(), usecase.ListPYQsInput{
+        BatchID: c.Query("batchId"),
+    })
+    if err != nil {
+        handleTeacherError(c, err)
+        return
+    }
+    resp := make([]dto.PYQResponse, 0, len(pyqs))
+    for _, p := range pyqs {
+        resp = append(resp, toPYQDTO(p))
+    }
+    response.Success(c, http.StatusOK, resp, "")
 }

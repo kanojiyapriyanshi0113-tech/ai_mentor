@@ -1,8 +1,9 @@
-﻿package postgres
+package postgres
 
 import (
     "context"
     "fmt"
+    "strings"
     "time"
 
     "github.com/google/uuid"
@@ -10,6 +11,7 @@ import (
 
     "ai-mentor-backend/internal/domain/apperror"
     "ai-mentor-backend/internal/domain/entity"
+    "ai-mentor-backend/internal/domain/repository"
 )
 
 type teacherRepository struct {
@@ -437,4 +439,104 @@ func (r *teacherRepository) GetDashboardStats(ctx context.Context) (*entity.Teac
     stats.UpcomingLiveClasses = upcoming
 
     return &stats, nil
+}
+// ---------- PDF / Mock Test / PYQ Listing ----------
+
+func (r *teacherRepository) ListPDFs(ctx context.Context, filter repository.PDFFilter) ([]entity.PDF, error) {
+    q := `SELECT p.id, p.chapter_id, p.title, p.file_url, p.display_order, p.is_active, p.created_at, p.updated_at FROM pdfs p`
+    conditions := []string{"p.is_active = true"}
+    args := []interface{}{}
+    argPos := 1
+
+    if filter.SubjectID != "" || filter.BatchID != "" {
+        q += " JOIN chapters c ON c.id = p.chapter_id"
+    }
+    if filter.BatchID != "" {
+        q += " JOIN subjects s ON s.id = c.subject_id"
+    }
+    if filter.ChapterID != "" {
+        conditions = append(conditions, fmt.Sprintf("p.chapter_id = $%d", argPos))
+        args = append(args, filter.ChapterID)
+        argPos++
+    }
+    if filter.SubjectID != "" {
+        conditions = append(conditions, fmt.Sprintf("c.subject_id = $%d", argPos))
+        args = append(args, filter.SubjectID)
+        argPos++
+    }
+    if filter.BatchID != "" {
+        conditions = append(conditions, fmt.Sprintf("s.batch_id = $%d", argPos))
+        args = append(args, filter.BatchID)
+        argPos++
+    }
+
+    q += " WHERE " + strings.Join(conditions, " AND ") + " ORDER BY p.display_order ASC"
+
+    rows, err := r.db.Query(ctx, q, args...)
+    if err != nil {
+        return nil, fmt.Errorf("list pdfs: %w", err)
+    }
+    defer rows.Close()
+
+    var pdfs []entity.PDF
+    for rows.Next() {
+        var p entity.PDF
+        if err := rows.Scan(&p.ID, &p.ChapterID, &p.Title, &p.FileURL, &p.DisplayOrder, &p.IsActive, &p.CreatedAt, &p.UpdatedAt); err != nil {
+            return nil, fmt.Errorf("scan pdf: %w", err)
+        }
+        pdfs = append(pdfs, p)
+    }
+    return pdfs, nil
+}
+
+func (r *teacherRepository) ListMockTests(ctx context.Context, filter repository.MockTestFilter) ([]entity.MockTest, error) {
+    q := `SELECT id, batch_id, title, duration_minutes, total_questions, is_active, created_at, updated_at FROM mock_tests WHERE is_active = true`
+    args := []interface{}{}
+    if filter.BatchID != "" {
+        q += " AND batch_id = $1"
+        args = append(args, filter.BatchID)
+    }
+    q += " ORDER BY created_at DESC"
+
+    rows, err := r.db.Query(ctx, q, args...)
+    if err != nil {
+        return nil, fmt.Errorf("list mock tests: %w", err)
+    }
+    defer rows.Close()
+
+    var tests []entity.MockTest
+    for rows.Next() {
+        var m entity.MockTest
+        if err := rows.Scan(&m.ID, &m.BatchID, &m.Title, &m.DurationMinutes, &m.TotalQuestions, &m.IsActive, &m.CreatedAt, &m.UpdatedAt); err != nil {
+            return nil, fmt.Errorf("scan mock test: %w", err)
+        }
+        tests = append(tests, m)
+    }
+    return tests, nil
+}
+
+func (r *teacherRepository) ListPYQs(ctx context.Context, filter repository.PYQFilter) ([]entity.PYQ, error) {
+    q := `SELECT id, batch_id, exam_name, year, subject_tag, file_url, is_active, created_at, updated_at FROM pyqs WHERE is_active = true`
+    args := []interface{}{}
+    if filter.BatchID != "" {
+        q += " AND batch_id = $1"
+        args = append(args, filter.BatchID)
+    }
+    q += " ORDER BY year DESC"
+
+    rows, err := r.db.Query(ctx, q, args...)
+    if err != nil {
+        return nil, fmt.Errorf("list pyqs: %w", err)
+    }
+    defer rows.Close()
+
+    var pyqs []entity.PYQ
+    for rows.Next() {
+        var p entity.PYQ
+        if err := rows.Scan(&p.ID, &p.BatchID, &p.ExamName, &p.Year, &p.SubjectTag, &p.FileURL, &p.IsActive, &p.CreatedAt, &p.UpdatedAt); err != nil {
+            return nil, fmt.Errorf("scan pyq: %w", err)
+        }
+        pyqs = append(pyqs, p)
+    }
+    return pyqs, nil
 }

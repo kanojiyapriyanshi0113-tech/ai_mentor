@@ -1,4 +1,4 @@
-﻿package repository
+package repository
 
 import (
     "context"
@@ -8,6 +8,20 @@ import (
 
     "ai-mentor-backend/internal/domain/entity"
 )
+
+type PDFFilter struct {
+    BatchID   string
+    SubjectID string
+    ChapterID string
+}
+
+type MockTestFilter struct {
+    BatchID string
+}
+
+type PYQFilter struct {
+    BatchID string
+}
 
 // TeacherRepository provides content-management persistence for the
 // teacher/admin role. It does not touch subscriptions, payments, users,
@@ -39,16 +53,19 @@ type TeacherRepository interface {
     CreatePDF(ctx context.Context, p *entity.PDF) error
     ReplacePDF(ctx context.Context, id uuid.UUID, fileURL string) error
     DeletePDF(ctx context.Context, id uuid.UUID) error
+    ListPDFs(ctx context.Context, filter PDFFilter) ([]entity.PDF, error)
 
     // Mock Test
     CreateMockTest(ctx context.Context, m *entity.MockTest) error
     UpdateMockTest(ctx context.Context, m *entity.MockTest) error
     DeleteMockTest(ctx context.Context, id uuid.UUID) error
+    ListMockTests(ctx context.Context, filter MockTestFilter) ([]entity.MockTest, error)
 
     // PYQ
     CreatePYQ(ctx context.Context, p *entity.PYQ) error
     UpdatePYQ(ctx context.Context, p *entity.PYQ) error
     DeletePYQ(ctx context.Context, id uuid.UUID) error
+    ListPYQs(ctx context.Context, filter PYQFilter) ([]entity.PYQ, error)
 
     // Live Class
     CreateLiveClass(ctx context.Context, l *entity.LiveClass) error

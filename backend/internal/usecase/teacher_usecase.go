@@ -1,4 +1,4 @@
-﻿package usecase
+package usecase
 
 import (
     "context"
@@ -125,6 +125,20 @@ type SendNotificationInput struct {
     Message  string
 }
 
+type ListPDFsInput struct {
+    BatchID   string
+    SubjectID string
+    ChapterID string
+}
+
+type ListMockTestsInput struct {
+    BatchID string
+}
+
+type ListPYQsInput struct {
+    BatchID string
+}
+
 type TeacherUsecase interface {
     GetDashboard(ctx context.Context) (*entity.TeacherDashboardStats, error)
 
@@ -149,14 +163,17 @@ type TeacherUsecase interface {
     UploadPDF(ctx context.Context, in CreatePDFInput) (*entity.PDF, error)
     ReplacePDF(ctx context.Context, id string, fileURL string) error
     DeletePDF(ctx context.Context, id string) error
+    ListPDFs(ctx context.Context, in ListPDFsInput) ([]entity.PDF, error)
 
     CreateMockTest(ctx context.Context, in CreateMockTestInput) (*entity.MockTest, error)
     UpdateMockTest(ctx context.Context, in UpdateMockTestInput) error
     DeleteMockTest(ctx context.Context, id string) error
+    ListMockTests(ctx context.Context, in ListMockTestsInput) ([]entity.MockTest, error)
 
     UploadPYQ(ctx context.Context, in CreatePYQInput) (*entity.PYQ, error)
     UpdatePYQ(ctx context.Context, in UpdatePYQInput) error
     DeletePYQ(ctx context.Context, id string) error
+    ListPYQs(ctx context.Context, in ListPYQsInput) ([]entity.PYQ, error)
 
     CreateLiveClass(ctx context.Context, in CreateLiveClassInput) (*entity.LiveClass, error)
 
@@ -460,4 +477,31 @@ func (uc *teacherUsecase) SendNotification(ctx context.Context, in SendNotificat
         return fmt.Errorf("send notification: %w", err)
     }
     return nil
+}
+func (uc *teacherUsecase) ListPDFs(ctx context.Context, in ListPDFsInput) ([]entity.PDF, error) {
+    pdfs, err := uc.teacherRepo.ListPDFs(ctx, repository.PDFFilter{
+        BatchID:   in.BatchID,
+        SubjectID: in.SubjectID,
+        ChapterID: in.ChapterID,
+    })
+    if err != nil {
+        return nil, fmt.Errorf("list pdfs: %w", err)
+    }
+    return pdfs, nil
+}
+
+func (uc *teacherUsecase) ListMockTests(ctx context.Context, in ListMockTestsInput) ([]entity.MockTest, error) {
+    tests, err := uc.teacherRepo.ListMockTests(ctx, repository.MockTestFilter{BatchID: in.BatchID})
+    if err != nil {
+        return nil, fmt.Errorf("list mock tests: %w", err)
+    }
+    return tests, nil
+}
+
+func (uc *teacherUsecase) ListPYQs(ctx context.Context, in ListPYQsInput) ([]entity.PYQ, error) {
+    pyqs, err := uc.teacherRepo.ListPYQs(ctx, repository.PYQFilter{BatchID: in.BatchID})
+    if err != nil {
+        return nil, fmt.Errorf("list pyqs: %w", err)
+    }
+    return pyqs, nil
 }
