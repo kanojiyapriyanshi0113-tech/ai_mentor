@@ -5,6 +5,8 @@ import "core/providers/subscription_provider.dart";
 import "core/providers/user_provider.dart";
 import "core/router/app_router.dart";
 import "core/theme/app_theme.dart";
+import "features/admin/presentation/providers/admin_provider.dart";
+import "features/teacher/presentation/providers/teacher_provider.dart";
 
 void main() {
   runApp(const AIMentorApp());
@@ -20,6 +22,8 @@ class AIMentorApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
         ChangeNotifierProvider(create: (_) => CourseProvider()),
+        ChangeNotifierProvider(create: (_) => TeacherProvider()),
+        ChangeNotifierProvider(create: (_) => AdminProvider()),
       ],
       child: MaterialApp.router(
         title: "AI Mentor",

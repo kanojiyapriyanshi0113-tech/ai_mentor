@@ -1,3 +1,9 @@
+﻿# Fix: Android blocking cleartext HTTP traffic to the dev backend
+# Adds INTERNET permission + network_security_config allowing http:// to 192.168.1.18
+
+$path = "C:\Users\ABC\Desktop\AI_Mentor\frontend\android\app\src\main\AndroidManifest.xml"
+New-Item -ItemType Directory -Force -Path (Split-Path $path) | Out-Null
+$content = @'
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
@@ -45,3 +51,24 @@
         </intent>
     </queries>
 </manifest>
+'@
+[System.IO.File]::WriteAllText($path, $content, (New-Object System.Text.UTF8Encoding($false)))
+Write-Host "Written: $path"
+
+$path = "C:\Users\ABC\Desktop\AI_Mentor\frontend\android\app\src\main\res\xml\network_security_config.xml"
+New-Item -ItemType Directory -Force -Path (Split-Path $path) | Out-Null
+$content = @'
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Allows plain http:// (cleartext) traffic to the local dev backend only.
+         Android blocks cleartext traffic by default for targetSdk 28+, which was
+         silently breaking every login/register/API call in debug builds. -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">192.168.1.18</domain>
+        <domain includeSubdomains="false">10.0.2.2</domain>
+        <domain includeSubdomains="false">localhost</domain>
+    </domain-config>
+</network-security-config>
+'@
+[System.IO.File]::WriteAllText($path, $content, (New-Object System.Text.UTF8Encoding($false)))
+Write-Host "Written: $path"

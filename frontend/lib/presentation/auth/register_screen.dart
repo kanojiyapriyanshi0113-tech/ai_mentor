@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -61,7 +61,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       if (!mounted) return;
       _redirectForRole(role);
-    } catch (e) {
+    } catch (e, st) {
+      debugPrint('REGISTER ERROR: $e');
+      debugPrint('$st');
       setState(() => _errorMessage = AuthApiService.extractErrorMessage(e));
     } finally {
       if (mounted) setState(() => _isSubmitting = false);

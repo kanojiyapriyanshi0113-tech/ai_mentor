@@ -1,8 +1,8 @@
-﻿import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-import '../models/teacher_models.dart';
-import '../network/teacher_api_service.dart';
+import '../../../../core/models/teacher_models.dart';
+import '../../../../core/network/teacher_api_service.dart';
 
 enum LoadStatus { idle, loading, success, error }
 

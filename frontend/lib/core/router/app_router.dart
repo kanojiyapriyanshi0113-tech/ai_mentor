@@ -16,6 +16,8 @@ import "../../presentation/settings/settings_screen.dart";
 import "../../presentation/help/help_screen.dart";
 import "../../presentation/upgrade_plan/upgrade_plan_screen.dart";
 import "../../presentation/shell/main_shell_screen.dart";
+import "../../features/teacher/presentation/screens/teacher_dashboard_screen.dart";
+import "../../features/admin/presentation/screens/admin_dashboard_screen.dart";
 import "../navigation/navigation_service.dart";
 import "app_routes.dart";
 
@@ -58,6 +60,14 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.upgradePlan,
       builder: (context, state) => const UpgradePlanScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.teacherDashboard,
+      builder: (context, state) => const TeacherDashboardScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.adminDashboard,
+      builder: (context, state) => const AdminDashboardScreen(),
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {

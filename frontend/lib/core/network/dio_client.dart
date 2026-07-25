@@ -2,7 +2,7 @@
 import '../storage/secure_storage_service.dart';
 
 class DioClient {
-  static const String baseUrl = 'http://192.168.1.18:8080/api';
+  static const String baseUrl = 'http://192.168.1.18:8081/api';
 
   late final Dio dio;
   final SecureStorageService _storage = SecureStorageService();
