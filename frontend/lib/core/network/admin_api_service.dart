@@ -123,6 +123,19 @@ class AdminApiService {
     await _dio.patch("/admin/subscriptions/plans/$id/enable");
   }
 
+  /// Uses GET /plans - a shared, non-admin-scoped route that already
+  /// exists on the backend (h.Subscription.ListPlans). It returns the
+  /// plan catalog only (code/name/price/duration/is_trial); it has no
+  /// per-plan subscriber-count field, so this cannot show "how many
+  /// students are on each tier" - only which tiers exist and their
+  /// price/duration. Add a subscriber-count field to that endpoint's
+  /// response to make a true per-tier breakdown possible.
+  Future<List<PlanCatalogModel>> listPlanCatalog() async {
+    final response = await _dio.get("/plans");
+    final data = response.data["data"] as List<dynamic>;
+    return data.map((e) => PlanCatalogModel.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
   Future<void> disablePlan(int id) async {
     await _dio.patch("/admin/subscriptions/plans/$id/disable");
   }

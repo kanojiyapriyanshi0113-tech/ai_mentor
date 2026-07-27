@@ -8,6 +8,7 @@ import "../../../../shared/widgets/quick_actions_grid.dart";
 import "../../../../shared/widgets/hero_summary_card.dart";
 import "../providers/admin_provider.dart";
 import "../widgets/admin_overview_section.dart";
+import "../widgets/admin_subscription_overview_section.dart";
 import "../widgets/admin_analytics_section.dart";
 import "../widgets/admin_content_statistics_section.dart";
 import "../widgets/admin_pending_actions_section.dart";
@@ -41,6 +42,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       // calls, but initState only runs once per screen instance, so
       // this still fires exactly once per visit.
       provider.loadReports();
+      if (provider.planCatalogStatus == LoadStatus.idle) {
+        provider.loadPlanCatalog();
+      }
     });
   }
 
@@ -124,11 +128,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               SizedBox(height: AppSpacing.xl),
 
               const DashboardSectionTitle(title: "Subscription Overview"),
-              const SectionPlaceholderCard(
-                title: "Subscription Overview",
-                icon: Icons.workspace_premium_outlined,
-                message: "Free trial, Pro, Ultra, and Ultra Max breakdowns will appear here.",
-              ),
+              const DashboardCard(child: AdminSubscriptionOverviewSection()),
               SizedBox(height: AppSpacing.xl),
 
               const DashboardSectionTitle(title: "Content Statistics"),

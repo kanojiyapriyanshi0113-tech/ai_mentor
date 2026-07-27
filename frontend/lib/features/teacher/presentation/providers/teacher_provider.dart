@@ -300,6 +300,19 @@ class TeacherProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> loadPdfs() async {
+    pdfsStatus = LoadStatus.loading;
+    notifyListeners();
+    try {
+      pdfs = await _api.listPdfs();
+      pdfsStatus = LoadStatus.success;
+    } catch (e) {
+      errorMessage = _errorFrom(e);
+      pdfsStatus = LoadStatus.error;
+    }
+    notifyListeners();
+  }
+
   // ---- Mock tests ----
 
   Future<bool> createMockTest({
@@ -336,6 +349,19 @@ class TeacherProvider extends ChangeNotifier {
       notifyListeners();
       return false;
     }
+  }
+
+  Future<void> loadMockTests() async {
+    mockTestsStatus = LoadStatus.loading;
+    notifyListeners();
+    try {
+      mockTests = await _api.listMockTests();
+      mockTestsStatus = LoadStatus.success;
+    } catch (e) {
+      errorMessage = _errorFrom(e);
+      mockTestsStatus = LoadStatus.error;
+    }
+    notifyListeners();
   }
 
   // ---- PYQs ----

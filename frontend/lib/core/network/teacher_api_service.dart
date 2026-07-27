@@ -208,6 +208,12 @@ class TeacherApiService {
     await _dio.delete("/teacher/pdfs/$id");
   }
 
+  Future<List<PdfModel>> listPdfs() async {
+    final response = await _dio.get("/teacher/pdfs");
+    final data = response.data["data"] as List<dynamic>;
+    return data.map((e) => PdfModel.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
   // ---- Mock tests ----
 
   Future<MockTestModel> createMockTest({
@@ -241,6 +247,12 @@ class TeacherApiService {
 
   Future<void> deleteMockTest(String id) async {
     await _dio.delete("/teacher/mocktests/$id");
+  }
+
+  Future<List<MockTestModel>> listMockTests() async {
+    final response = await _dio.get("/teacher/mocktests");
+    final data = response.data["data"] as List<dynamic>;
+    return data.map((e) => MockTestModel.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   // ---- PYQs ----

@@ -22,6 +22,9 @@ class AdminProvider extends ChangeNotifier {
   LoadStatus plansStatus = LoadStatus.idle;
   List<AdminPlanModel> plans = [];
 
+  LoadStatus planCatalogStatus = LoadStatus.idle;
+  List<PlanCatalogModel> planCatalog = [];
+
   LoadStatus couponsStatus = LoadStatus.idle;
   List<CouponModel> coupons = [];
 
@@ -216,6 +219,19 @@ class AdminProvider extends ChangeNotifier {
       notifyListeners();
       return false;
     }
+  }
+
+  Future<void> loadPlanCatalog() async {
+    planCatalogStatus = LoadStatus.loading;
+    notifyListeners();
+    try {
+      planCatalog = await _api.listPlanCatalog();
+      planCatalogStatus = LoadStatus.success;
+    } catch (e) {
+      errorMessage = _errorFrom(e);
+      planCatalogStatus = LoadStatus.error;
+    }
+    notifyListeners();
   }
 
   // ---- Coupons ----

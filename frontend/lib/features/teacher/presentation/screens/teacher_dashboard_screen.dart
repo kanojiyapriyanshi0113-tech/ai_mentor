@@ -8,6 +8,9 @@ import "../../../../shared/widgets/quick_actions_grid.dart";
 import "../../../../shared/widgets/hero_summary_card.dart";
 import "../providers/teacher_provider.dart";
 import "../widgets/teacher_overview_section.dart";
+import "../widgets/live_classes_sections.dart";
+import "../widgets/teacher_recent_content_section.dart";
+import "../../../../shared/widgets/dashboard_card.dart";
 import "../../../../core/providers/user_provider.dart";
 
 class TeacherDashboardScreen extends StatefulWidget {
@@ -25,6 +28,12 @@ class _TeacherDashboardScreenState extends State<TeacherDashboardScreen> {
       final provider = context.read<TeacherProvider>();
       if (provider.dashboardStatus == LoadStatus.idle) {
         provider.loadDashboard();
+      }
+      if (provider.pdfsStatus == LoadStatus.idle) {
+        provider.loadPdfs();
+      }
+      if (provider.mockTestsStatus == LoadStatus.idle) {
+        provider.loadMockTests();
       }
     });
   }
@@ -103,12 +112,8 @@ class _TeacherDashboardScreenState extends State<TeacherDashboardScreen> {
               const TeacherOverviewSection(),
               SizedBox(height: AppSpacing.xl),
 
-              const DashboardSectionTitle(title: "Today's Summary"),
-              const SectionPlaceholderCard(
-                title: "Today's Summary",
-                icon: Icons.today_outlined,
-                message: "Today's lectures, live classes, and new students will appear here.",
-              ),
+              const DashboardSectionTitle(title: "Today's Schedule"),
+              const DashboardCard(child: TodaysScheduleSection()),
               SizedBox(height: AppSpacing.xl),
 
               const DashboardSectionTitle(title: "Recent Students"),
@@ -128,19 +133,11 @@ class _TeacherDashboardScreenState extends State<TeacherDashboardScreen> {
               SizedBox(height: AppSpacing.xl),
 
               const DashboardSectionTitle(title: "Upcoming Live Classes"),
-              const SectionPlaceholderCard(
-                title: "Upcoming Live Classes",
-                icon: Icons.videocam_outlined,
-                message: "Scheduled live classes will appear here.",
-              ),
+              const DashboardCard(child: UpcomingLiveClassesSection()),
               SizedBox(height: AppSpacing.xl),
 
               const DashboardSectionTitle(title: "Recent Content"),
-              const SectionPlaceholderCard(
-                title: "Recent Content",
-                icon: Icons.upload_file_outlined,
-                message: "Recently uploaded lectures, PDFs, and tests will appear here.",
-              ),
+              const DashboardCard(child: TeacherRecentContentSection()),
               SizedBox(height: AppSpacing.xl),
 
               const DashboardSectionTitle(title: "Pending Tasks"),

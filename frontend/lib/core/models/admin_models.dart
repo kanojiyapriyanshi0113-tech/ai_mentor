@@ -112,6 +112,35 @@ class AdminPlanModel {
       );
 }
 
+/// Matches the response shape of GET /plans (dto.PlanResponse on the
+/// backend) - a plain plan catalog entry. Deliberately separate from
+/// AdminPlanModel: that endpoint's response has no "id" or "is_active"
+/// field, so parsing it with AdminPlanModel.fromJson would crash on the
+/// non-nullable id cast. Used only for the Subscription Overview section.
+class PlanCatalogModel {
+  final String code;
+  final String name;
+  final int pricePaise;
+  final int durationDays;
+  final bool isTrial;
+
+  PlanCatalogModel({
+    required this.code,
+    required this.name,
+    required this.pricePaise,
+    required this.durationDays,
+    required this.isTrial,
+  });
+
+  factory PlanCatalogModel.fromJson(Map<String, dynamic> json) => PlanCatalogModel(
+        code: json['code'] as String,
+        name: json['name'] as String,
+        pricePaise: json['price_paise'] as int? ?? 0,
+        durationDays: json['duration_days'] as int? ?? 0,
+        isTrial: json['is_trial'] as bool? ?? false,
+      );
+}
+
 class CouponModel {
   final String id;
   final String code;
