@@ -1,12 +1,14 @@
 ﻿import "package:flutter/material.dart";
 import "package:provider/provider.dart";
-
 import "../../../../core/theme/app_colors.dart";
 import "../../../../core/theme/app_spacing.dart";
-import "../../../../core/widgets/app_card.dart";
-import "../../../../core/widgets/app_page_padding.dart";
-import "../../../../core/widgets/section_header.dart";
+import "../../../../shared/widgets/dashboard_header.dart";
+import "../../../../shared/widgets/section_placeholder_card.dart";
+import "../../../../shared/widgets/quick_actions_grid.dart";
+import "../../../../shared/widgets/hero_summary_card.dart";
 import "../providers/teacher_provider.dart";
+import "../widgets/teacher_overview_section.dart";
+import "../../../../core/providers/user_provider.dart";
 
 class TeacherDashboardScreen extends StatefulWidget {
   const TeacherDashboardScreen({super.key});
@@ -20,159 +22,161 @@ class _TeacherDashboardScreenState extends State<TeacherDashboardScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<TeacherProvider>().loadDashboard();
+      final provider = context.read<TeacherProvider>();
+      if (provider.dashboardStatus == LoadStatus.idle) {
+        provider.loadDashboard();
+      }
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final provider = context.watch<TeacherProvider>();
-
-    return Scaffold(
-      appBar: AppBar(title: const Text("Teacher Dashboard")),
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () => context.read<TeacherProvider>().loadDashboard(),
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
-            child: AppPagePadding(
-              child: _buildBody(provider),
-            ),
-          ),
-        ),
-      ),
-    );
+  Future<void> _onRefresh() async {
+    await context.read<TeacherProvider>().loadDashboard();
   }
 
-  Widget _buildBody(TeacherProvider provider) {
-    if (provider.dashboardStatus == LoadStatus.loading && provider.dashboard == null) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: AppSpacing.xxxl),
-        child: Center(child: CircularProgressIndicator()),
-      );
-    }
+  @override
+  Widget build(BuildContext context) {
+    // NOTE: Adjust `userProvider.name` below to match your actual
+    // UserProvider field once confirmed - same assumption as the
+    // Admin dashboard screen.
+    final userProvider = context.watch<UserProvider>();
 
-    if (provider.dashboardStatus == LoadStatus.error && provider.dashboard == null) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.xxxl),
-        child: Center(
-          child: Column(
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: _onRefresh,
+          color: AppColors.primary,
+          child: ListView(
+            padding: EdgeInsets.all(AppSpacing.lg),
             children: [
-              Text(provider.errorMessage ?? "Failed to load dashboard"),
-              const SizedBox(height: AppSpacing.md),
-              OutlinedButton(
-                onPressed: () => context.read<TeacherProvider>().loadDashboard(),
-                child: const Text("Retry"),
+              DashboardHeader(
+                greeting: "Welcome Teacher",
+                name: userProvider.currentUser?.name ?? "Teacher",
+                role: "Teacher",
+                onAvatarTap: () {},
+                onNotificationsTap: () {},
+                onSearchTap: () {},
               ),
+              SizedBox(height: AppSpacing.xl),
+
+              // NOTE: TeacherDashboardModel has no day-scoped lecture/live-
+              // class counts or a pending-doubts field, so "Lectures" and
+              // "Live Classes" here are totals/upcoming counts, not
+              // "today's" as the spec named them - and "Pending Doubts"
+              // has no backing field at all yet, shown as "-". Add these
+              // to the backend + TeacherDashboardModel to make them accurate.
+              Consumer<TeacherProvider>(
+                builder: (context, provider, _) {
+                  final d = provider.dashboard;
+                  return HeroSummaryCard(
+                    stats: [
+                      HeroStatItem(
+                        label: "Lectures",
+                        value: d?.totalLectures,
+                        icon: Icons.play_circle_outline,
+                      ),
+                      HeroStatItem(
+                        label: "Live Classes",
+                        value: d?.upcomingLiveClasses.length,
+                        icon: Icons.videocam_outlined,
+                      ),
+                      const HeroStatItem(
+                        label: "Pending Doubts",
+                        value: null,
+                        icon: Icons.help_outline_rounded,
+                      ),
+                      HeroStatItem(
+                        label: "Total Students",
+                        value: d?.totalStudents,
+                        icon: Icons.groups_outlined,
+                      ),
+                    ],
+                    ctaLabel: "Start Live Class",
+                    ctaIcon: Icons.videocam_outlined,
+                    onCtaTap: () {},
+                  );
+                },
+              ),
+              SizedBox(height: AppSpacing.xl),
+
+              const DashboardSectionTitle(title: "Overview"),
+              const TeacherOverviewSection(),
+              SizedBox(height: AppSpacing.xl),
+
+              const DashboardSectionTitle(title: "Today's Summary"),
+              const SectionPlaceholderCard(
+                title: "Today's Summary",
+                icon: Icons.today_outlined,
+                message: "Today's lectures, live classes, and new students will appear here.",
+              ),
+              SizedBox(height: AppSpacing.xl),
+
+              const DashboardSectionTitle(title: "Recent Students"),
+              const SectionPlaceholderCard(
+                title: "Recent Students",
+                icon: Icons.person_add_alt_outlined,
+                message: "Latest enrolled students will appear here.",
+              ),
+              SizedBox(height: AppSpacing.xl),
+
+              const DashboardSectionTitle(title: "Performance"),
+              const SectionPlaceholderCard(
+                title: "Performance",
+                icon: Icons.insights_outlined,
+                message: "Average progress, mock scores, and completion rate will appear here.",
+              ),
+              SizedBox(height: AppSpacing.xl),
+
+              const DashboardSectionTitle(title: "Upcoming Live Classes"),
+              const SectionPlaceholderCard(
+                title: "Upcoming Live Classes",
+                icon: Icons.videocam_outlined,
+                message: "Scheduled live classes will appear here.",
+              ),
+              SizedBox(height: AppSpacing.xl),
+
+              const DashboardSectionTitle(title: "Recent Content"),
+              const SectionPlaceholderCard(
+                title: "Recent Content",
+                icon: Icons.upload_file_outlined,
+                message: "Recently uploaded lectures, PDFs, and tests will appear here.",
+              ),
+              SizedBox(height: AppSpacing.xl),
+
+              const DashboardSectionTitle(title: "Pending Tasks"),
+              const SectionPlaceholderCard(
+                title: "Pending Tasks",
+                icon: Icons.checklist_outlined,
+                message: "Draft lectures, pending PDFs, and unpublished tests will appear here.",
+              ),
+              SizedBox(height: AppSpacing.xl),
+
+              const DashboardSectionTitle(title: "Activity Timeline"),
+              const SectionPlaceholderCard(
+                title: "Activity Timeline",
+                icon: Icons.history_outlined,
+                message: "A timeline of your recent activity will appear here.",
+              ),
+              SizedBox(height: AppSpacing.xl),
+
+              const DashboardSectionTitle(title: "Quick Actions"),
+              QuickActionsGrid(
+                actions: [
+                  QuickAction(label: "Batches", icon: Icons.layers_outlined, onTap: () {}),
+                  QuickAction(label: "Subjects", icon: Icons.subject_outlined, onTap: () {}),
+                  QuickAction(label: "Chapters", icon: Icons.menu_book_outlined, onTap: () {}),
+                  QuickAction(label: "Lectures", icon: Icons.play_circle_outline, onTap: () {}),
+                  QuickAction(label: "PDFs", icon: Icons.picture_as_pdf_outlined, onTap: () {}),
+                  QuickAction(label: "Mock Tests", icon: Icons.fact_check_outlined, onTap: () {}),
+                  QuickAction(label: "PYQs", icon: Icons.history_edu_outlined, onTap: () {}),
+                  QuickAction(label: "Live Classes", icon: Icons.videocam_outlined, onTap: () {}),
+                  QuickAction(label: "Notifications", icon: Icons.notifications_outlined, onTap: () {}),
+                ],
+              ),
+              SizedBox(height: AppSpacing.xl),
             ],
           ),
         ),
-      );
-    }
-
-    final dashboard = provider.dashboard;
-    if (dashboard == null) return const SizedBox.shrink();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SectionHeader(title: "Overview"),
-        const SizedBox(height: AppSpacing.md),
-        GridView.count(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 2,
-          crossAxisSpacing: AppSpacing.md,
-          mainAxisSpacing: AppSpacing.md,
-          childAspectRatio: 1.5,
-          children: [
-            _StatCard(label: "Students", value: "${dashboard.totalStudents}", color: AppColors.primary),
-            _StatCard(label: "Batches", value: "${dashboard.totalBatches}", color: AppColors.info),
-            _StatCard(label: "Subjects", value: "${dashboard.totalSubjects}", color: AppColors.success),
-            _StatCard(label: "Chapters", value: "${dashboard.totalChapters}", color: AppColors.warning),
-            _StatCard(label: "Lectures", value: "${dashboard.totalLectures}", color: AppColors.secondary),
-            _StatCard(label: "Mock Tests", value: "${dashboard.totalMockTests}", color: AppColors.error),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.xxl),
-        SectionHeader(
-          title: "Upcoming Live Classes",
-          actionLabel: dashboard.upcomingLiveClasses.isEmpty ? null : "See all",
-          onActionTap: dashboard.upcomingLiveClasses.isEmpty
-              ? null
-              : () {
-                  // TODO: navigate to full live-classes list once that screen exists
-                },
-        ),
-        const SizedBox(height: AppSpacing.md),
-        if (dashboard.upcomingLiveClasses.isEmpty)
-          AppCard(
-            child: Text(
-              "No live classes scheduled",
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          )
-        else
-          ...dashboard.upcomingLiveClasses.map(
-            (lc) => Padding(
-              padding: const EdgeInsets.only(bottom: AppSpacing.md),
-              child: AppCard(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(lc.title, style: Theme.of(context).textTheme.titleSmall),
-                          const SizedBox(height: AppSpacing.xs),
-                          Text(
-                            _formatScheduledAt(lc.scheduledAt),
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-
-  String _formatScheduledAt(DateTime dt) {
-    final local = dt.toLocal();
-    final hour = local.hour % 12 == 0 ? 12 : local.hour % 12;
-    final minute = local.minute.toString().padLeft(2, "0");
-    final period = local.hour >= 12 ? "PM" : "AM";
-    return "${local.day}/${local.month}/${local.year} • $hour:$minute $period";
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color color;
-
-  const _StatCard({required this.label, required this.value, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return AppCard(
-      color: color.withValues(alpha: 0.08),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            value,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: color),
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(label, style: Theme.of(context).textTheme.bodyMedium),
-        ],
       ),
     );
   }
