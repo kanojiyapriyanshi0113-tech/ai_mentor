@@ -1,4 +1,4 @@
-﻿import "package:flutter/material.dart";
+import "package:flutter/material.dart";
 
 /// Simple responsive breakpoints for adapting layouts across
 /// phones, large phones/foldables, and tablets.

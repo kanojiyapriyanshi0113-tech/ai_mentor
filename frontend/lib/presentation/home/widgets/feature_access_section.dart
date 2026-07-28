@@ -24,7 +24,7 @@ class FeatureAccessSection extends StatelessWidget {
   const FeatureAccessSection({super.key});
 
   static const _features = [
-    _GatedFeature(icon: Icons.calendar_month_outlined, label: "AI Planner", featureKey: "has_ai_planner"),
+    _GatedFeature(icon: Icons.calendar_month_outlined, label: "AI Planner", featureKey: "has_ai_planner", route: AppRoutes.aiPlanner),
     _GatedFeature(icon: Icons.note_alt_outlined, label: "AI Notes", featureKey: "has_ai_notes"),
     _GatedFeature(icon: Icons.image_outlined, label: "Image Doubt Upload", featureKey: "has_image_doubt_upload", route: AppRoutes.aiMentor),
     _GatedFeature(icon: Icons.upload_file_outlined, label: "Document Upload", featureKey: "has_document_upload", route: AppRoutes.aiMentor),

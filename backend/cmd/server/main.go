@@ -48,6 +48,8 @@ func main() {
     courseProgressRepo := postgres.NewCourseProgressRepository(pool)
     teacherRepo := postgres.NewTeacherRepository(pool)
     adminRepo := postgres.NewAdminRepository(pool)
+    teacherAppRepo := postgres.NewTeacherApplicationRepository(pool)
+    studyPlanRepo := postgres.NewStudyPlanRepository(pool)
 
     // External providers
     aiProvider := ai.NewGroqProvider(cfg.GroqAPIKey, cfg.GroqModel)
@@ -66,6 +68,15 @@ func main() {
     courseProgressUC := usecase.NewCourseProgressUsecase(courseProgressRepo)
     teacherUC := usecase.NewTeacherUsecase(teacherRepo)
     adminUC := usecase.NewAdminUsecase(adminRepo)
+    earningsRepo := postgres.NewEarningsRepository(pool)
+    earningsUC := usecase.NewEarningsUsecase(earningsRepo)
+    teacherPayoutRepo := postgres.NewTeacherPayoutRepository(pool)
+    teacherPayoutUC := usecase.NewTeacherPayoutUsecase(teacherPayoutRepo)
+    teacherAppUC := usecase.NewTeacherApplicationUsecase(teacherAppRepo, userRepo)
+    teacherAppManageUC := usecase.NewTeacherApplicationManageUsecase(teacherAppRepo)
+    teacherApprovalUC := usecase.NewTeacherApprovalUsecase(teacherAppRepo, userRepo)
+    studentManagementUC := usecase.NewStudentManagementUsecase(adminRepo)
+    studyPlanUC := usecase.NewStudyPlanUsecase(studyPlanRepo)
 
     // Handlers
     h := &httpDelivery.Handlers{
@@ -82,6 +93,13 @@ func main() {
         CourseProgress: handler.NewCourseProgressHandler(courseProgressUC),
         Teacher:        handler.NewTeacherHandler(teacherUC),
         Admin:          handler.NewAdminHandler(adminUC),
+        TeacherApplication: handler.NewTeacherApplicationHandler(teacherAppUC),
+        TeacherApplicationManage: handler.NewTeacherApplicationManageHandler(teacherAppManageUC),
+        TeacherApproval: handler.NewTeacherApprovalHandler(teacherApprovalUC),
+        StudentManagement: handler.NewStudentManagementHandler(studentManagementUC),
+        Earnings: handler.NewEarningsHandler(earningsUC),
+        TeacherPayout: handler.NewTeacherPayoutHandler(teacherPayoutUC),
+        StudyPlan: handler.NewStudyPlanHandler(studyPlanUC),
     }
 
     r := gin.Default()

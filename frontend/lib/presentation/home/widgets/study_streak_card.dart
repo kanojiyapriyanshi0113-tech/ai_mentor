@@ -1,4 +1,4 @@
-﻿import "package:flutter/material.dart";
+import "package:flutter/material.dart";
 
 class StudyStreakCard extends StatelessWidget {
   const StudyStreakCard({super.key});

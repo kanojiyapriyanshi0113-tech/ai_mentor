@@ -1,4 +1,4 @@
-﻿class OnboardingContent {
+class OnboardingContent {
   final String title;
   final String description;
   final String assetPath;

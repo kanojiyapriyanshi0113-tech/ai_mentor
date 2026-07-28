@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 /// Minimal JWT payload decoder - decodes and reads claims only,
 /// does not verify the signature (verification happens server-side).

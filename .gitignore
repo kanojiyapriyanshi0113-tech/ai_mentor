@@ -6,3 +6,9 @@ build/
 frontend/.flutter-plugins*
 frontend/android/local.properties
 backend/tmp/
+
+backend.zip
+frontend.zip
+backend/bin/
+*.bak2
+backend/tables_list.txt

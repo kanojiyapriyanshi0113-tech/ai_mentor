@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../../domain/onboarding_content.dart';
 
 class OnboardingPage extends StatelessWidget {

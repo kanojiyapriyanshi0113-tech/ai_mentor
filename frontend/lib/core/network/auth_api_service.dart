@@ -1,4 +1,4 @@
-﻿import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 
 import '../models/user_model.dart';
 import '../storage/secure_storage_service.dart';

@@ -1,4 +1,4 @@
-package usecase
+﻿package usecase
 
 import (
     "context"
@@ -16,6 +16,7 @@ type CreateBatchInput struct {
     Title       string
     Description string
     Thumbnail   string
+    TeacherID   string
 }
 
 type UpdateBatchInput struct {
@@ -203,6 +204,7 @@ func (uc *teacherUsecase) CreateBatch(ctx context.Context, in CreateBatchInput) 
         Description: in.Description,
         Thumbnail:   in.Thumbnail,
         IsActive:    true,
+        TeacherID:   in.TeacherID,
         CreatedAt:   time.Now(),
     }
     if err := uc.teacherRepo.CreateBatch(ctx, b); err != nil {

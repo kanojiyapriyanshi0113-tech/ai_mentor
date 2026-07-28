@@ -1,4 +1,4 @@
-﻿class UserModel {
+class UserModel {
   final String id;
   final String name;
   final String email;
@@ -7,6 +7,7 @@
   final DateTime trialEndDate;
   final String? selectedExamName;
   final int? selectedExamId;
+  final DateTime? joinedAt;
 
   UserModel({
     required this.id,
@@ -17,6 +18,7 @@
     required this.trialEndDate,
     this.selectedExamName,
     this.selectedExamId,
+    this.joinedAt,
   });
 
   factory UserModel.fromApiJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@
       trialEndDate: DateTime.parse(json['trial_end_date'] as String),
       selectedExamName: json['selected_exam_name'] as String?,
       selectedExamId: json['selected_exam_id'] as int?,
+      joinedAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
     );
   }
 
@@ -42,6 +45,7 @@
       trialEndDate: trialEndDate,
       selectedExamName: selectedExamName ?? this.selectedExamName,
       selectedExamId: selectedExamId ?? this.selectedExamId,
+      joinedAt: joinedAt,
     );
   }
 }

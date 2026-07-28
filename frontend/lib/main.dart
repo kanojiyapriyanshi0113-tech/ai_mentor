@@ -1,6 +1,8 @@
 ﻿import "package:flutter/material.dart";
 import "package:provider/provider.dart";
 import "core/providers/course_provider.dart";
+import "core/providers/notification_provider.dart";
+import "core/providers/planner_provider.dart";
 import "core/providers/subscription_provider.dart";
 import "core/providers/user_provider.dart";
 import "core/router/app_router.dart";
@@ -24,6 +26,8 @@ class AIMentorApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CourseProvider()),
         ChangeNotifierProvider(create: (_) => AdminProvider()),
         ChangeNotifierProvider(create: (_) => TeacherProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => PlannerProvider()),
       ],
       child: MaterialApp.router(
         title: "AI Mentor",

@@ -1,4 +1,4 @@
-﻿enum ChatSender { user, ai }
+enum ChatSender { user, ai }
 
 class ChatMessageDummy {
   final String id;

@@ -54,6 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         trialStartDate: fetched.trialStartDate,
         trialEndDate: fetched.trialEndDate,
         selectedExamName: existing?.selectedExamName,
+        joinedAt: fetched.joinedAt,
       );
 
       context.read<UserProvider>().setUser(merged);
@@ -121,6 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         trialStartDate: updated.trialStartDate,
         trialEndDate: updated.trialEndDate,
         selectedExamName: existing?.selectedExamName,
+        joinedAt: updated.joinedAt,
       );
       context.read<UserProvider>().setUser(merged);
 

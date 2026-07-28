@@ -1,4 +1,4 @@
-﻿import "package:flutter/material.dart";
+import "package:flutter/material.dart";
 
 class DailyGoalCard extends StatelessWidget {
   const DailyGoalCard({super.key});

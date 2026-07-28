@@ -1,4 +1,4 @@
-﻿class SubscriptionSummary {
+class SubscriptionSummary {
   final String currentPlan;
   final int trialDaysLeft;
   final int aiQuestionsRemaining;

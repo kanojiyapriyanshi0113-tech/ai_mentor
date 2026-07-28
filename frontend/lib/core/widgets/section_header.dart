@@ -1,4 +1,4 @@
-﻿import "package:flutter/material.dart";
+import "package:flutter/material.dart";
 
 /// Reusable section heading used above dashboard/list sections
 /// (e.g. "Quick Actions", "Recommended Courses").

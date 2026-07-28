@@ -39,6 +39,20 @@ type PYQ struct {
     UpdatedAt  time.Time
 }
 
+// Assignment represents a task set by a teacher for students of a batch.
+type Assignment struct {
+    ID          string
+    BatchID     string
+    Title       string
+    Description string
+    FileURL     string
+    DueAt       *time.Time
+    MaxMarks    int
+    IsActive    bool
+    CreatedAt   time.Time
+    UpdatedAt   time.Time
+}
+
 // LiveClass represents a scheduled live session for a batch.
 type LiveClass struct {
     ID          string

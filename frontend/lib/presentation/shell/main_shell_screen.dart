@@ -1,4 +1,4 @@
-﻿import "package:flutter/material.dart";
+import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 
 import "widgets/app_bottom_nav_bar.dart";

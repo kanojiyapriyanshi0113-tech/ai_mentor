@@ -1,4 +1,4 @@
-﻿import "package:dio/dio.dart";
+import "package:dio/dio.dart";
 
 import "../models/user_model.dart";
 import "api_client.dart";

@@ -1,4 +1,4 @@
-﻿import "package:flutter/material.dart";
+import "package:flutter/material.dart";
 
 /// Animates a numeric value counting up from 0 (or its previous value)
 /// whenever it changes. Used in overview/hero cards.

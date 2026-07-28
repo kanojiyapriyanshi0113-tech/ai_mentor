@@ -1,7 +1,9 @@
-﻿import "package:flutter/material.dart";
+import "package:flutter/material.dart";
 import "package:provider/provider.dart";
+import "package:go_router/go_router.dart";
 import "../../../../core/theme/app_colors.dart";
 import "../../../../core/theme/app_spacing.dart";
+import "../../../../core/router/app_routes.dart";
 import "../../../../shared/widgets/dashboard_header.dart";
 import "../../../../shared/widgets/section_placeholder_card.dart";
 import "../../../../shared/widgets/quick_actions_grid.dart";
@@ -62,9 +64,9 @@ class _TeacherDashboardScreenState extends State<TeacherDashboardScreen> {
                 greeting: "Welcome Teacher",
                 name: userProvider.currentUser?.name ?? "Teacher",
                 role: "Teacher",
-                onAvatarTap: () {},
-                onNotificationsTap: () {},
-                onSearchTap: () {},
+                onAvatarTap: () => context.push(AppRoutes.teacherProfile),
+                onNotificationsTap: () => context.push(AppRoutes.teacherNotifications),
+                onSearchTap: () => context.push(AppRoutes.teacherSearch),
               ),
               SizedBox(height: AppSpacing.xl),
 

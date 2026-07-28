@@ -1,4 +1,4 @@
-package entity
+﻿package entity
 
 import "time"
 
@@ -10,7 +10,18 @@ Title       string
 Description string
 Thumbnail   string
 IsActive    bool
+TeacherID   string
 CreatedAt   time.Time
+}
+
+// TeacherStudent is a lightweight view of a student engaged with one of a
+// teacher's batches, used for the "My Students" screen.
+type TeacherStudent struct {
+	ID          string
+	Name        string
+	Email       string
+	BatchTitles []string
+	LastActive  time.Time
 }
 
 // Subject represents a subject within a batch.

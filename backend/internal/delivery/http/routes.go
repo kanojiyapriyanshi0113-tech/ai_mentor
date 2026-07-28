@@ -1,4 +1,4 @@
-package http
+﻿package http
 
 import (
     "github.com/gin-gonic/gin"
@@ -21,7 +21,14 @@ type Handlers struct {
     Course         *handler.CourseHandler
     CourseProgress *handler.CourseProgressHandler
     Teacher        *handler.TeacherHandler
+    TeacherApplication *handler.TeacherApplicationHandler
+    TeacherApplicationManage *handler.TeacherApplicationManageHandler
+    TeacherApproval *handler.TeacherApprovalHandler
+    StudentManagement *handler.StudentManagementHandler
+    Earnings       *handler.EarningsHandler
+    TeacherPayout  *handler.TeacherPayoutHandler
     Admin          *handler.AdminHandler
+    StudyPlan      *handler.StudyPlanHandler
 }
 
 func RegisterRoutes(r *gin.Engine, h *Handlers, jwtSecret string, subscriptionUC usecase.SubscriptionUsecase) {
@@ -62,6 +69,17 @@ func RegisterRoutes(r *gin.Engine, h *Handlers, jwtSecret string, subscriptionUC
         protected.GET("/course/lectures/:chapterId", h.Course.ListLectures)
         protected.POST("/course/lectures/:lectureId/complete", h.CourseProgress.CompleteLecture)
         protected.GET("/course/batches/:id/progress", h.CourseProgress.GetBatchProgress)
+
+        // Become a Teacher (any authenticated student can apply)
+        protected.POST("/teacher-application", h.TeacherApplication.Submit)
+        protected.GET("/teacher-application/me", h.TeacherApplication.GetMine)
+
+        // AI Planner
+        protected.GET("/planner/plans", h.StudyPlan.ListPlans)
+        protected.POST("/planner/plans", h.StudyPlan.CreatePlan)
+        protected.PUT("/planner/plans/:id", h.StudyPlan.UpdatePlan)
+        protected.DELETE("/planner/plans/:id", h.StudyPlan.DeletePlan)
+        protected.POST("/planner/plans/:id/complete", h.StudyPlan.CompletePlan)
     }
 
     teacher := api.Group("/teacher")
@@ -118,6 +136,21 @@ func RegisterRoutes(r *gin.Engine, h *Handlers, jwtSecret string, subscriptionUC
         admin.PATCH("/teachers/:id/suspend", h.Admin.SuspendTeacher)
         admin.DELETE("/teachers/:id", h.Admin.DeleteTeacher)
         admin.GET("/teachers", h.Admin.ListTeachers)
+
+        admin.GET("/teacher-applications", h.TeacherApplication.List)
+        admin.GET("/teacher-applications/:id", h.TeacherApplication.Get)
+        admin.PATCH("/teacher-applications/:id/approve", h.TeacherApplication.Approve)
+        admin.PATCH("/teacher-applications/:id/reject", h.TeacherApplication.Reject)
+        admin.PATCH("/teacher-applications/:id/request-changes", h.TeacherApplication.RequestChanges)
+
+        RegisterTeacherApplicationManageRoutes(protected, admin, h.TeacherApplicationManage)
+
+        RegisterTeacherApprovalRoutes(admin, h.TeacherApproval)
+
+        RegisterStudentManagementRoutes(admin, h.StudentManagement)
+
+        RegisterEarningsRoutes(teacher, admin, h.Earnings)
+        RegisterTeacherPayoutRoutes(teacher, admin, h.TeacherPayout)
 
         admin.GET("/students", h.Admin.ListStudents)
         admin.PATCH("/students/:id/block", h.Admin.BlockStudent)

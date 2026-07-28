@@ -1,4 +1,4 @@
-﻿class AppRoutes {
+class AppRoutes {
   AppRoutes._();
 
   static const splash = "/";
@@ -13,6 +13,7 @@
   static const practice = "/practice";
   static const profile = "/profile";
   static const aiMentor = "/ai-mentor";
+  static const aiPlanner = "/ai-planner";
 
   static const settings = "/settings";
   static const help = "/help";
@@ -28,6 +29,11 @@
   static const teacherMockTests = "/teacher/mock-tests";
   static const teacherPyqs = "/teacher/pyqs";
   static const teacherNotifications = "/teacher/notifications";
+  static const teacherProfile = "/teacher/profile";
+  static const teacherSearch = "/teacher/search";
+  static const teacherContent = "/teacher/content";
+  static const teacherStudents = "/teacher/students";
+  static const teacherCalendar = "/teacher/calendar";
 
   // Admin module
   static const adminDashboard = "/admin/dashboard";
@@ -37,4 +43,9 @@
   static const adminCoupons = "/admin/coupons";
   static const adminReports = "/admin/reports";
   static const adminSettings = "/admin/settings";
+  static const adminProfile = "/admin/profile";
+  static const adminSearch = "/admin/search";
+  static const adminManagement = "/admin/management";
+  static const adminAnalytics = "/admin/analytics";
+  static const adminNotifications = "/admin/notifications";
 }

@@ -1,4 +1,4 @@
-﻿class AdminDashboardModel {
+class AdminDashboardModel {
   final int totalStudents;
   final int totalTeachers;
   final int totalRevenuePaise;

@@ -1,4 +1,4 @@
-﻿class ExamOption {
+class ExamOption {
   final String code;
   final String name;
   final String icon;

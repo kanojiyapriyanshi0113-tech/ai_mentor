@@ -1,4 +1,4 @@
-﻿class BatchModel {
+class BatchModel {
   final String id;
   final int examId;
   final String title;

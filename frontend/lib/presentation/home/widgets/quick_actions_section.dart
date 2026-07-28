@@ -37,9 +37,11 @@ class QuickActionsSection extends StatelessWidget {
       children: [
         Text("Quick Actions", style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: _actions.map((action) {
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: _actions.map((action) {
             final isLocked = action.featureKey != null &&
                 (features[action.featureKey] ?? 0) == 0;
 
@@ -50,10 +52,12 @@ class QuickActionsSection extends StatelessWidget {
               onTap = () => context.push(action.route!);
             }
 
-            return GestureDetector(
-              onTap: onTap,
-              child: Column(
-                children: [
+            return Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: GestureDetector(
+                onTap: onTap,
+                child: Column(
+                  children: [
                   Stack(
                     clipBehavior: Clip.none,
                     children: [
@@ -96,10 +100,12 @@ class QuickActionsSection extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                ],
+                  ],
+                ),
               ),
             );
           }).toList(),
+          ),
         ),
       ],
     );

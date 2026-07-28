@@ -4,7 +4,7 @@ import "../navigation/navigation_service.dart";
 import "../storage/secure_storage_service.dart";
 import "../widgets/premium_bottom_sheet.dart";
 
-const String kBaseUrl = "http://192.168.1.18:8081/api";
+const String kBaseUrl = "http://192.168.1.29:8081/api";
 
 class ApiClient {
   late final Dio dio;

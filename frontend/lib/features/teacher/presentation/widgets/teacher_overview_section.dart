@@ -1,4 +1,4 @@
-﻿import "package:flutter/material.dart";
+import "package:flutter/material.dart";
 import "package:provider/provider.dart";
 import "../../../../shared/widgets/stat_card.dart";
 import "../../../../shared/widgets/retry_state.dart";

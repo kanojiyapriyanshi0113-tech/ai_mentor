@@ -1,4 +1,4 @@
-package handler
+﻿package handler
 
 import (
     "errors"
@@ -118,6 +118,7 @@ func (h *TeacherHandler) CreateBatch(c *gin.Context) {
         Title:       req.Title,
         Description: req.Description,
         Thumbnail:   req.Thumbnail,
+        TeacherID:   currentUserID(c),
     })
     if err != nil {
         handleTeacherError(c, err)

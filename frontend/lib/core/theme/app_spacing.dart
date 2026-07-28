@@ -1,4 +1,4 @@
-﻿/// Consistent spacing scale used across the app.
+/// Consistent spacing scale used across the app.
 /// Prefer these constants over magic numbers in widget code.
 class AppSpacing {
   AppSpacing._();

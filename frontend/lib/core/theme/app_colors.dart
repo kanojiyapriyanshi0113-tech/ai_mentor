@@ -1,4 +1,4 @@
-﻿import "package:flutter/material.dart";
+import "package:flutter/material.dart";
 
 /// Centralized color palette for the AI Mentor design system.
 class AppColors {

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../../domain/exam.dart';
 
 class ExamCard extends StatelessWidget {

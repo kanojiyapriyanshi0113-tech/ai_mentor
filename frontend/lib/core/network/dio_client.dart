@@ -2,7 +2,7 @@
 import '../storage/secure_storage_service.dart';
 
 class DioClient {
-  static const String baseUrl = 'http://192.168.1.18:8081/api';
+  static const String baseUrl = 'http://192.168.1.29:8081/api';
 
   late final Dio dio;
   final SecureStorageService _storage = SecureStorageService();
@@ -19,7 +19,7 @@ class DioClient {
       onRequest: (options, handler) async {
         final token = await _storage.getToken();
         if (token != null) {
-          options.headers['Authorization'] = 'Bearer ' + token;
+          options.headers['Authorization'] = 'Bearer $token';
         }
         return handler.next(options);
       },

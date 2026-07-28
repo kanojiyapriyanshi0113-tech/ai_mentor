@@ -1,7 +1,9 @@
-﻿import "package:flutter/material.dart";
+import "package:flutter/material.dart";
 import "package:provider/provider.dart";
+import "package:go_router/go_router.dart";
 import "../../../../core/theme/app_colors.dart";
 import "../../../../core/theme/app_spacing.dart";
+import "../../../../core/router/app_routes.dart";
 import "../../../../shared/widgets/dashboard_header.dart";
 import "../../../../shared/widgets/section_placeholder_card.dart";
 import "../../../../shared/widgets/quick_actions_grid.dart";
@@ -13,6 +15,7 @@ import "../widgets/admin_analytics_section.dart";
 import "../widgets/admin_content_statistics_section.dart";
 import "../widgets/admin_pending_actions_section.dart";
 import "../widgets/admin_recent_activity_section.dart";
+import "admin_settings_screen.dart";
 import "../../../../shared/widgets/dashboard_card.dart";
 import "../../../../core/providers/user_provider.dart";
 
@@ -72,9 +75,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 greeting: "Welcome Admin",
                 name: userProvider.currentUser?.name ?? "Admin",
                 role: "Admin",
-                onAvatarTap: () {},
-                onNotificationsTap: () {},
-                onSearchTap: () {},
+                onAvatarTap: () => context.push(AppRoutes.adminProfile),
+                onNotificationsTap: () => context.push(AppRoutes.adminNotifications),
+                onSearchTap: () => context.push(AppRoutes.adminSearch),
               ),
               SizedBox(height: AppSpacing.xl),
 
@@ -160,7 +163,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   QuickAction(label: "Coupons", icon: Icons.confirmation_number_outlined, onTap: () {}),
                   QuickAction(label: "Payments", icon: Icons.payments_outlined, onTap: () {}),
                   QuickAction(label: "Reports", icon: Icons.bar_chart_outlined, onTap: () {}),
-                  QuickAction(label: "Settings", icon: Icons.settings_outlined, onTap: () {}),
+                  QuickAction(
+                    label: "Settings",
+                    icon: Icons.settings_outlined,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const AdminSettingsScreen()),
+                    ),
+                  ),
                   QuickAction(label: "Banner", icon: Icons.image_outlined, onTap: () {}),
                 ],
               ),

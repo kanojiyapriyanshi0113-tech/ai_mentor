@@ -1,4 +1,4 @@
-﻿/// Placeholder for Google Sign-In integration.
+/// Placeholder for Google Sign-In integration.
 /// Wire this up with google_sign_in package + backend /auth/google
 /// endpoint in a later module. Not part of Day 1 core scope.
 class GoogleAuthService {
